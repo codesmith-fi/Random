@@ -1,5 +1,5 @@
 /**
-Random
+Pseudo Random Number generation tools
 Author: Erno Pakarinen 
 
 About
@@ -74,4 +74,4 @@ namespace codesmith {
 	};
 }
 
-#endif
+#endif // __RANDOM_H_DEFINED__
