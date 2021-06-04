@@ -34,10 +34,22 @@ int main()
 {
 	codesmith::Random gen(314159u);
 
+	std::cout << "Ints between 0 - 100\n";
 	for(int i = 0; i < 20; ++i) {
-		uint32_t r = gen.lcg_parkmiller() % 256;
+		uint32_t r = gen.randomInt(0, 100);
 		std::cout << "Rand: " << r << "\n";
 	}
 
+	std::cout << "\nInts between 10 - 50\n";
+	for(int i = 0; i < 20; ++i) {
+		uint32_t r = gen.randomInt(10, 50);
+		std::cout << "Rand: " << r << "\n";
+	}
+
+	std::cout << "\nDoubles between 100.0 - 200.0\n";
+	for(int i = 0; i < 20; ++i) {
+		double r = gen.randomDouble(100.0f, 200.0f);
+		std::cout << "Rand: " << r << "\n";
+	}
 	return 0;
 }

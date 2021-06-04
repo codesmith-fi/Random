@@ -8,6 +8,7 @@ Contains several high performance pseudo random number generators
 
 Acknowledgements:
 https://en.wikipedia.org/wiki/Lehmer_random_number_generator
+https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/
 https://en.wikipedia.org/wiki/Xorshift
 https://en.wikipedia.org/wiki/Permuted_congruential_generator
 
@@ -49,28 +50,25 @@ namespace codesmith {
 
 	public: // Generators and seeders
 		void seed(uint32_t _seed) { m_state = _seed; };
-
-		// Lehmer random number generators
-		uint32_t lcg_parkmiller()
-		{
-			uint64_t product = (uint64_t)m_state * 48271;
-			uint32_t x = (product & 0x7fffffff) + (product >> 31);
-
-			x = (x & 0x7fffffff) + (x >> 31);
-			return m_state = x;
+		uint32_t randomInt(uint32_t _low, uint32_t _high) {
+			return (_low + (random() % (_high - _low)));
 		};
-		
-		uint32_t lcg_rand()
+
+		double randomDouble(double _low, double _high) {
+			return ( _low + ((double)random() / (double)0xffffffff) * (_high - _low) );
+		};
+			
+		uint32_t random()
 		{
-			uint64_t product = (uint64_t)m_state * 279470273u;
-			uint32_t x;
-			product = (product & 0xffffffff) + 5 * (uint32_t)(product >> 32);
-			product += 4;
-			x = (uint32_t)product + 5 * (uint32_t)(product >> 32);
-			return m_state = x - 4;
+			m_state += 0xe120fc15;
+			uint64_t t1 = (uint64_t)m_state * 0x4a39b70d;
+			uint32_t t2 = (t1 >> 32) ^ t1;
+			t1 = (uint64_t)t2 * 0x12fad5c9;
+			return t2 = (uint32_t)(t1 >> 32) ^ t1;
 		}
+
 	private:
-		uint32_t m_state;
+		uint32_t m_state;		
 	};
 }
 
