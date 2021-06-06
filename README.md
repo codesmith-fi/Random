@@ -8,6 +8,7 @@ Description
 
 Several fast random number generation algorithms
 
+Please note, althoug I released this source code under my license, I do not claim ownership nor I am the author of the original random generation algorithms. I mentioned the original source of the algorithms in the header file Random.h. My part of the code is free to use for any purposes as stated in the license.
 
 Building
 ========
