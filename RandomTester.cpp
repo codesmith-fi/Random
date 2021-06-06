@@ -46,10 +46,12 @@ int main()
 		std::cout << "Rand: " << r << "\n";
 	}
 
+	gen.seed(3141592653u);
 	std::cout << "\nDoubles between 100.0 - 200.0\n";
 	for(int i = 0; i < 20; ++i) {
 		double r = gen.randomDouble(100.0f, 200.0f);
-		std::cout << "Rand: " << r << "\n";
+		double r2 = gen.randomDouble2(100.0f, 200.0f);
+		std::cout << "Rand: " << r << " : " << r2 << "\n";
 	}
 	return 0;
 }

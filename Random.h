@@ -6,7 +6,7 @@ About
 
 Contains several high performance pseudo random number generators 
 
-Acknowledgements:
+Random number generator references:
 https://en.wikipedia.org/wiki/Lehmer_random_number_generator
 https://lemire.me/blog/2019/03/19/the-fastest-conventional-random-number-generator-that-can-pass-big-crush/
 https://en.wikipedia.org/wiki/Xorshift
@@ -51,20 +51,44 @@ namespace codesmith {
 	public: // Generators and seeders
 		void seed(uint32_t _seed) { m_state = _seed; };
 		uint32_t randomInt(uint32_t _low, uint32_t _high) {
-			return (_low + (random() % (_high - _low)));
+			return (_low + (lehmer() % (_high - _low)));
 		};
 
 		double randomDouble(double _low, double _high) {
-			return ( _low + ((double)random() / (double)0xffffffff) * (_high - _low) );
+			return ( _low + ((double)lehmer() / (double)0x7fffffff) * (_high - _low) );
 		};
-			
-		uint32_t random()
+
+		double randomDouble2(double _low, double _high) {
+			return (_low + ((double)random2() / (double)0xffffffff) * (_high - _low));
+		};
+
+		// Chains lehmer and xorshift
+		uint32_t random2()
 		{
-			m_state += 0xe120fc15;
-			uint64_t t1 = (uint64_t)m_state * 0x4a39b70d;
-			uint32_t t2 = (t1 >> 32) ^ t1;
-			t1 = (uint64_t)t2 * 0x12fad5c9;
-			return t2 = (uint32_t)(t1 >> 32) ^ t1;
+			uint32_t r = lehmer();
+			return xorshift32();
+		}
+
+		// Lehmer - taken from 
+		// https://en.wikipedia.org/wiki/Lehmer_random_number_generator
+		uint32_t lehmer()
+		{
+			uint64_t product = (uint64_t)m_state * 48271;
+			uint32_t x = (product & 0x7fffffff) + (product >> 31);
+
+			x = (x & 0x7fffffff) + (x >> 31);
+			return m_state = x;
+		}
+
+		// Xorshift - Taken from 
+		// https://en.wikipedia.org/wiki/Xorshift
+		uint32_t xorshift32()
+		{
+			uint32_t x = m_state;
+			x ^= x << 13;
+			x ^= x >> 17;
+			x ^= x << 5;
+			return m_state = x;
 		}
 
 	private:
